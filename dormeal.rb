@@ -80,5 +80,10 @@ for i in 0...menu.length do
 	dayHeader += 3
 end
 
-p menu
+# JSONに変換した結果を表示
 print JSON.generate(menu)
+
+# JSONファイル(menu.json)を出力
+open("menu.json", "w") do |io|
+	JSON.dump(menu, io)
+end
