@@ -47,6 +47,9 @@ days = []
 	end
 end
 
+# すべてのデータを格納するハッシュを作成
+data = Hash.new
+
 # すべてのメニューを格納する配列を作成
 menu = Array.new(days.length)
 
@@ -63,27 +66,43 @@ for i in 0...menu.length do
 
 	# 食事単位のループ
 	3.times do |i|
-		meal[i] = []
+		meal[i] = Hash.new
+		dishes = []
 		j = 0
 		while arr[mealFirstRow[i] + j][dayHeader + 2] != nil && arr[mealFirstRow[i] + j][dayHeader + 2].rindex("KC") != nil
 			anotherMenu = [arr[mealFirstRow[i] + j][dayHeader], arr[mealFirstRow[i] + j][dayHeader+2].delete("KC").to_i]
-			meal[i] += Array.new(2)
-			meal[i][j] = anotherMenu
+			dishes += Array.new(2)
+			dishes[j] = anotherMenu
 			j += 1
 		end
-		meal[i].compact!
+		dishes.compact!
+		
+		while arr[mealFirstRow[i] + j][dayHeader] == " " || arr[mealFirstRow[i] + j][dayHeader] == nil
+			j += 1
+		end
+		# nutritionに栄養情報を格納する
+		puts arr[mealFirstRow[i] + j][dayHeader].to_s
+		nutrition = getNutrition(arr[mealFirstRow[i] + j][dayHeader])
+		
+		meal[i] = {"dishes" => dishes, "nutrition" => nutrition}
 	end
 
 	dayMenu = {"breakfast" => meal[0], "lunch" => meal[1], "dinner" => meal[2]}
-	menu[i] = {"date" => days[i], "month" => getMonth(days[i]), "day" => getDay(days[i]), "dow" => getDayOfWeek(days[i]), "dayMenu" => dayMenu}
+	
+	# nutritionに1日の栄養情報を格納する
+	nutrition = getNutrition(arr[mealFirstRow[3]][dayHeader])
+	menu[i] = {"date" => days[i], "month" => getMonth(days[i]), "day" => getDay(days[i]), "dow" => getDayOfWeek(days[i]), "daily_menu" => dayMenu, "daily_nutrition" => nutrition}
 	
 	dayHeader += 3
 end
 
+#dataにデータを格納する
+data = {"menu" => menu}
+
 # JSONに変換した結果を表示
-print JSON.generate(menu)
+print JSON.generate(data)
 
 # JSONファイル(menu.json)を出力
 open("menu.json", "w") do |io|
-	JSON.dump(menu, io)
+	JSON.dump(data, io)
 end

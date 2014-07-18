@@ -55,3 +55,15 @@ kanjiArr = %w{月 火 水 木 金 土 日}
 	end
 	return dow
 end
+
+# 栄養のハッシュを返す
+def getNutrition(str)
+	natrition = Hash.new
+	items = %w{kcal protein fat cabs salt}
+	split = str.split(/\D*[ ]\D*/)
+	for i in 0...split.length do
+		val = (i!=4) ? split[i].to_i : split[i].to_f
+		natrition.store(items[i],val)
+	end
+	return natrition
+end
