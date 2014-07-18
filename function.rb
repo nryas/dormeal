@@ -1,5 +1,5 @@
 # 日付が書かれた列数を返す
-def findDaysRow
+def daysRowAt
 	CSV.foreach(CSVNAME) do |row|
 		if row[1] == "区分" then
 			return row
@@ -16,7 +16,7 @@ def getLengthOfCols(table)
 end
 
 # 指定した値がはじめに見つかる列の数を返す．見つからない場合は-1を返す．
-def nthRowWithVal(data, val)
+def rowAt(data, val)
 	count = 0
 	data.each do |row|
 		row.each do |elem|

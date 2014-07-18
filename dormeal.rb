@@ -22,11 +22,11 @@ puts "変換に成功しました"
 options = { # CSVファイルを読み込むときのオプション
 	:col_sep => ',',
 	:skip_blanks => true,
-	:headers => findDaysRow
+	:headers => daysRowAt
 }
 file = CSV.read(CSVNAME, options)
 
-nthRowWithVal(file.to_a, "区分").times do
+rowAt(file.to_a, "区分").times do
 	file.delete(0)
 end
 
@@ -54,10 +54,10 @@ data = Hash.new
 menu = Array.new(days.length)
 
 # 朝昼夕と合計が何行目から始まるかを格納する配列		
-mealFirstRow = [nthRowWithVal(arr, '朝食'),
-			nthRowWithVal(arr, '昼食'),
-			nthRowWithVal(arr, "夕食"),
-			nthRowWithVal(arr, "合計")]
+mealFirstRow = [rowAt(arr, '朝食'),
+			rowAt(arr, '昼食'),
+			rowAt(arr, "夕食"),
+			rowAt(arr, "合計")]
 dayHeader = 1
 
 # 1日単位のループ
